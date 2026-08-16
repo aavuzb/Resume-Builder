@@ -305,6 +305,19 @@ const ResumeDocx = (() => {
             });
           });
         },
+        personal_projects(sink) {
+          const rows = (data.personal_projects || []).filter((p) =>
+            (p.name || "").trim() || (p.url || "").trim() || (p.bullets || []).some((b) => b.trim()));
+          if (!rows.length) return;
+          sink.push(heading(I18N.t("resume.personal_projects", { lang }), pal));
+          rows.forEach((proj) => {
+            const name = (proj.name || "").trim();
+            if (name) sink.push(projectHeading(name, proj.url || "", pal));
+            (proj.bullets || []).forEach((b) => {
+              if (b.trim()) sink.push(bullet(b.trim(), name ? 0.32 : 0.20, pal));
+            });
+          });
+        },
         education(sink) {
           const rows = (data.education || []).filter((edu) => edu.degree || edu.school || edu.meta || edu.thesis);
           if (!rows.length) return;

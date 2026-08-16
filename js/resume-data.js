@@ -9,7 +9,7 @@
 
 const ResumeData = (() => {
   const DEFAULT_SECTION_ORDER = [
-    "summary", "skills", "experience", "education",
+    "summary", "skills", "experience", "personal_projects", "education",
     "publications", "certificates", "additional",
   ];
 

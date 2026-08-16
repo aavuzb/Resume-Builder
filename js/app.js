@@ -7,7 +7,7 @@
  */
 
 const SECTION_KEYS = [
-  "personal", "summary", "skills", "experience", "education",
+  "personal", "summary", "skills", "experience", "personal_projects", "education",
   "publications", "certificates", "additional", "generate",
 ];
 
@@ -15,6 +15,7 @@ function sectionLabels() {
   return {
     personal: I18N.t("nav.personal"), summary: I18N.t("nav.summary"),
     skills: I18N.t("nav.skills"), experience: I18N.t("nav.experience"),
+    personal_projects: I18N.t("nav.personal_projects"),
     education: I18N.t("nav.education"), publications: I18N.t("nav.publications"),
     certificates: I18N.t("nav.certificates"), additional: I18N.t("nav.additional"),
     generate: I18N.t("nav.generate"),
@@ -341,6 +342,7 @@ class ResumeBuilderApp {
     this._buildSummaryPage();
     this._buildSkillsPage();
     this._buildExperiencePage();
+    this._buildPersonalProjectsPage();
     this._buildEducationPage();
     this._buildPublicationsPage();
     this._buildCertificatesPage();
@@ -732,10 +734,19 @@ class ResumeBuilderApp {
     this._addPage("experience", page);
   }
 
+  _buildPersonalProjectsPage() {
+    const { page, body } = DomUtils.makeScrollPage();
+    this.eyebrowLabels.personal_projects = DomUtils.sectionHeader(
+      body, `${I18N.t("app.step")} 5`, I18N.t("personal_projects.step_title"), I18N.t("personal_projects.step_hint"));
+    this.personalProjectsList = new PersonalProjectList();
+    body.appendChild(this.personalProjectsList.el);
+    this._addPage("personal_projects", page);
+  }
+
   _buildEducationPage() {
     const { page, body } = DomUtils.makeScrollPage();
     this.eyebrowLabels.education = DomUtils.sectionHeader(
-      body, `${I18N.t("app.step")} 5`, I18N.t("education.step_title"), I18N.t("education.step_hint"));
+      body, `${I18N.t("app.step")} 6`, I18N.t("education.step_title"), I18N.t("education.step_hint"));
     this.educationList = new EducationList();
     body.appendChild(this.educationList.el);
     this._addPage("education", page);
@@ -744,7 +755,7 @@ class ResumeBuilderApp {
   _buildPublicationsPage() {
     const { page, body } = DomUtils.makeScrollPage();
     this.eyebrowLabels.publications = DomUtils.sectionHeader(
-      body, `${I18N.t("app.step")} 6`, I18N.t("publications.step_title"), I18N.t("publications.step_hint"));
+      body, `${I18N.t("app.step")} 7`, I18N.t("publications.step_title"), I18N.t("publications.step_hint"));
     this.publicationsList = new PublicationList();
     body.appendChild(this.publicationsList.el);
     this._addPage("publications", page);
@@ -753,7 +764,7 @@ class ResumeBuilderApp {
   _buildCertificatesPage() {
     const { page, body } = DomUtils.makeScrollPage();
     this.eyebrowLabels.certificates = DomUtils.sectionHeader(
-      body, `${I18N.t("app.step")} 7`, I18N.t("certificates.step_title"), I18N.t("certificates.step_hint"));
+      body, `${I18N.t("app.step")} 8`, I18N.t("certificates.step_title"), I18N.t("certificates.step_hint"));
     this.certificatesList = new LabelValueList(
       I18N.t("certificates.add_row"), "certificates",
       I18N.t("certificates.label_placeholder"), I18N.t("certificates.value_placeholder"),
@@ -765,7 +776,7 @@ class ResumeBuilderApp {
   _buildAdditionalPage() {
     const { page, body } = DomUtils.makeScrollPage();
     this.eyebrowLabels.additional = DomUtils.sectionHeader(
-      body, `${I18N.t("app.step")} 8`, I18N.t("additional.step_title"), I18N.t("additional.step_hint"));
+      body, `${I18N.t("app.step")} 9`, I18N.t("additional.step_title"), I18N.t("additional.step_hint"));
     this.additionalList = new LabelValueList(
       I18N.t("additional.add_row"), "additional",
       I18N.t("additional.label_placeholder"), I18N.t("additional.value_placeholder"),
@@ -776,7 +787,7 @@ class ResumeBuilderApp {
 
   _buildGeneratePage() {
     const { page, body } = DomUtils.makeScrollPage();
-    DomUtils.sectionHeader(body, `${I18N.t("app.step")} 9`, I18N.t("generate.step_title"), I18N.t("generate.step_hint"));
+    DomUtils.sectionHeader(body, `${I18N.t("app.step")} 10`, I18N.t("generate.step_title"), I18N.t("generate.step_hint"));
 
     body.appendChild(DomUtils.microLabel(I18N.t("generate.live_preview")));
     body.appendChild(DomUtils.el("div", { className: "spacer-8" }));
@@ -863,6 +874,7 @@ class ResumeBuilderApp {
       summary: !!data.summary,
       skills: data.skills.some((r) => r.label || r.value),
       experience: data.experience.some((j) => j.title || j.company),
+      personal_projects: data.personal_projects.some((p) => p.name || p.url || (p.bullets || []).some((b) => b.trim())),
       education: data.education.some((e) => e.degree || e.school || e.meta || e.thesis),
       publications: data.publications.some((p) => p.title || p.detail),
       certificates: data.certificates.some((r) => r.label || r.value),
@@ -1023,6 +1035,7 @@ class ResumeBuilderApp {
       summary: this.summaryEdit.value.trim(),
       skills: this.skillsList.getData(),
       experience: this.experienceList.getData(),
+      personal_projects: this.personalProjectsList.getData(),
       education: this.educationList.getData(),
       publications: this.publicationsList.getData(),
       certificates: this.certificatesList.getData(),
@@ -1072,6 +1085,7 @@ class ResumeBuilderApp {
     this.summaryEdit.value = data.summary || "";
     this.skillsList.loadData(data.skills || []);
     this.experienceList.loadData(data.experience || []);
+    this.personalProjectsList.loadData(data.personal_projects || []);
     this.educationList.loadData(data.education || []);
     this.publicationsList.loadData(data.publications || []);
     this.certificatesList.loadData(data.certificates || []);

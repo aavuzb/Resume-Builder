@@ -40,6 +40,7 @@ You can go back and fill in more, or save anyway with just what you've entered s
 - **Drag-and-drop reordering** — sidebar sections, contact fields, skill/certificate rows, and individual experience projects can all be dragged (or moved with ▲/▼ buttons) into place.
 - **Multi-language interface** — English, O'zbekcha, and 한국어, for both the app itself and the resume's own section headings.
 - **Structured work history** — start/end dates, an employment-type dropdown, and clickable company/project/school links.
+- **Personal Projects section** — a place for side projects and open-source work, separate from your paid experience: a project name, an optional clickable link, and bullet points, one per line.
 - **Draft save/load** — "Save Draft" downloads a `.json` file with everything you've entered; "Load Draft" reopens it later to keep editing.
 - **Missing-info warnings** — a hard stop if your name is missing, and a clear heads-up (with the option to continue anyway) if other sections are still empty placeholders.
 - **Real exports** — a genuinely formatted `.docx` (not an image), and a vector, selectable-text `.pdf` — see [Export quality](#export-quality) below.
@@ -118,7 +119,7 @@ Then open `http://localhost:8080`. An internet connection is required on first l
 | `js/sample-data.js` | The blank starting state, and the example placeholder content shown in the live preview |
 | `js/dom-utils.js` | DOM-building helpers, drag-and-drop reordering, and the draggable/resizable dialog panels |
 | `js/preview.js` | Renders resume data to HTML and drives the live preview `<iframe>` |
-| `js/widgets.js` | The dynamic list widgets: skills/certificates rows, experience → project cards, education, publications |
+| `js/widgets.js` | The dynamic list widgets: skills/certificates rows, experience → project cards, personal projects, education, publications |
 | `js/style-dialog.js` | The "Resume Style" floating panel |
 | `js/format-dialog.js` | The "Resume Format" floating panel — the 10-layout gallery |
 | `js/docx-export.js` | Builds the `.docx` file client-side via the `docx` library |

@@ -378,6 +378,83 @@ class ExperienceList {
   }
 }
 
+// ======================================================= personal projects ==
+class PersonalProjectList {
+  constructor() {
+    this.cards = [];
+
+    this.el = D.el("div", { className: "personal-projects-list" });
+    this.container = D.el("div", { className: "personal-projects-cards" });
+    this.el.appendChild(this.container);
+
+    const addBtn = D.button(I18N.t("personal_projects.add"), "primary");
+    addBtn.addEventListener("click", () => this.addCard());
+    const row = D.el("div", { className: "row-wrap" });
+    row.appendChild(addBtn);
+    this.el.appendChild(row);
+  }
+
+  addCard(name, url, bullets) {
+    const frame = D.el("div", { className: "card" });
+
+    const topRow = D.el("div", { className: "card-top-row" });
+    const badge = D.badgeLabel(this.cards.length + 1, "main");
+    topRow.appendChild(badge);
+    topRow.appendChild(D.el("div", { className: "spacer-flex" }));
+    const removeBtn = D.button(I18N.t("personal_projects.remove"), "danger", { small: true });
+    topRow.appendChild(removeBtn);
+    frame.appendChild(topRow);
+
+    const nameEdit = D.makeLineEdit(name, { bold: true, placeholder: I18N.t("personal_projects.project_name_placeholder") });
+    D.addField(frame, I18N.t("personal_projects.project_name"), nameEdit, "field-gap-10");
+
+    const urlEdit = D.makeLineEdit(url, { placeholder: I18N.t("common.url_placeholder") });
+    D.addField(frame, I18N.t("personal_projects.project_link"), urlEdit);
+
+    const bulletsEdit = D.makeTextArea(bullets, { rows: 4, placeholder: I18N.t("personal_projects.bullets_placeholder") });
+    bulletsEdit.classList.add("bullets-textarea");
+    D.addField(frame, I18N.t("personal_projects.bullets"), bulletsEdit);
+
+    this.container.appendChild(frame);
+    const entry = { frame, badge, name: nameEdit, url: urlEdit, bullets: bulletsEdit };
+
+    const projPath = (suffix) => () => {
+      const idx = this.cards.indexOf(entry);
+      return idx >= 0 ? `personal_projects.${idx}.${suffix}` : null;
+    };
+    D.setFieldPath(nameEdit, projPath("heading"));
+    D.setFieldPath(urlEdit, projPath("heading"));
+    D.setFieldPath(bulletsEdit, projPath("bullets"));
+
+    removeBtn.addEventListener("click", () => this.removeCard(entry));
+    this.cards.push(entry);
+    return entry;
+  }
+
+  removeCard(entry) {
+    entry.frame.remove();
+    this.cards = this.cards.filter((c) => c !== entry);
+    this._renumber();
+  }
+
+  _renumber() {
+    this.cards.forEach((c, i) => { c.badge.textContent = String(i + 1); });
+  }
+
+  getData() {
+    return this.cards.map((c) => ({
+      name: c.name.value.trim(),
+      url: c.url.value.trim(),
+      bullets: c.bullets.value.split("\n"),
+    }));
+  }
+
+  loadData(items) {
+    [...this.cards].forEach((c) => this.removeCard(c));
+    (items || []).forEach((item) => this.addCard(item.name || "", item.url || "", (item.bullets || []).join("\n")));
+  }
+}
+
 // ================================================================ education ==
 class EducationList {
   constructor() {

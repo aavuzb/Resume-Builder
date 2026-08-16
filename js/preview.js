@@ -309,6 +309,7 @@ body {
       links: I18N.t("personal.links_title"),
       skills: I18N.t("nav.skills"),
       experience: I18N.t("nav.experience"),
+      personal_projects: I18N.t("nav.personal_projects"),
       education: I18N.t("nav.education"),
       publications: I18N.t("nav.publications"),
       certificates: I18N.t("nav.certificates"),
@@ -526,6 +527,33 @@ body {
       });
     }
 
+    function renderPersonalProjects(sink) {
+      const { aligned, allExample } = alignedItems(data.personal_projects, ex && ex.personal_projects, projectVisible);
+      if (!aligned.length) return;
+      sink.push(heading(I18N.t("resume.personal_projects", { lang }), allExample));
+      aligned.forEach(({ item: proj, isExample, i }) => {
+        sink.push(`<div class="${cls("sheet-block", isExample)}">`);
+        const name_ = (proj.name || "").trim();
+        const headingField = `personal_projects.${i}.heading`;
+        if (name_) {
+          const headingInner =
+            '<span class="sheet-bullet-mark">&#8227;  </span>' +
+            linkOrText(name_, proj.url, "sheet-project-link");
+          sink.push(ftag("div", cls("sheet-project-heading", isExample), headingField, headingInner));
+        }
+        const bulletClass = cls(name_ ? "sheet-bullet sheet-bullet-indent" : "sheet-bullet", isExample);
+        const bulletsField = `personal_projects.${i}.bullets`;
+        const bulletLines = (proj.bullets || []).filter((b) => b.trim());
+        if (bulletLines.length) {
+          const bulletsHtml = bulletLines.map((bullet) =>
+            `<div class="sheet-bullet-line"><span class="sheet-bullet-mark">${bulletEntity}  </span>` +
+            `<span>${e(bullet.trim())}</span></div>`).join("");
+          sink.push(ftag("div", bulletClass, bulletsField, bulletsHtml));
+        }
+        sink.push("</div>");
+      });
+    }
+
     function renderEducation(sink) {
       const { aligned, allExample } = alignedItems(
         data.education, ex && ex.education,
@@ -589,6 +617,7 @@ body {
 
     const sectionRenderers = {
       summary: renderSummary, skills: renderSkills, experience: renderExperience,
+      personal_projects: renderPersonalProjects,
       education: renderEducation, publications: renderPublications,
       certificates: renderCertificates, additional: renderAdditional,
     };

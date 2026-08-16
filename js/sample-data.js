@@ -41,6 +41,9 @@ const SAMPLE_DATA = {
       projects: [],
     },
   ],
+  personal_projects: [
+    { name: "", url: "", bullets: [] },
+  ],
   education: [
     { degree: "", school: "", school_url: "", meta: "", thesis: "" },
   ],
@@ -109,6 +112,23 @@ const EXAMPLE_RESUME_DATA = {
             "Built an Android application to control and monitor an air purification device.",
           ],
         },
+      ],
+    },
+  ],
+  personal_projects: [
+    {
+      name: "Resume Builder — Web-based resume creation tool",
+      url: "",
+      bullets: [
+        "Built a client-side resume builder with a live preview, DOCX/PDF export, and multi-language support.",
+        "Implemented drag-and-drop section reordering and a dozen swappable resume layout templates.",
+      ],
+    },
+    {
+      name: "Auto Test — LLM-powered test generation tool (open-source)",
+      url: "",
+      bullets: [
+        "Open-sourced a CLI that turns written test specifications into runnable test code using local LLMs.",
       ],
     },
   ],
